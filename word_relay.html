@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>끝말잇기</title>
+  <link rel="stylesheet" href="word_relay.css">
+</head>
+<body>
+      <div><span id="order">1</span>번째 참가자</div>
+      <div>제시어 : <span id="word"></span></div>
+      <input type="text">
+      <button >입력</button>
+      <button >입력</button>
+      <button >입력</button>
+
+        <script>
+            const number= Number(prompt("몇 명이 참가하나요?"))
+             //querySelector로 요소 검색/querySelectorAll은 여러개 요소  검색, 태그를 변수에 선언하면 $표시 해주기 
+            const $button= document.querySelector('button')
+            const $input= document.querySelector('input')
+            const $word = document.querySelector('#word')
+            const $order = document.querySelector('span')
+            let word; //제시어
+            let newWord; // 새로 입력한 단어
+            
+           
+          const onClickButton=()=>{
+            if(!word){//제시어가 비어 있는가?
+              //비어있음 
+              //값
+              word = newWord;
+              //화면
+              $word.textContent = word;
+
+              //하나하나 안지우고 입력하면 입력하는 창 빈칸 되게 하는 법
+              $input.value='';
+
+             const order= Number($order.textContent)
+
+             //현재순서 
+             if(order+1>number){  
+                $order.textContent=1;
+
+             }else{
+              $order.textContent = order+1;
+             }
+             //커서 깜박임
+              $input.focus()
+            }else{
+              //안비어있음 
+              if(word[word.length -1]===newWord[0]){ //제시어 마지막글자와 새로 입력한 단어 첫번째 글자가 올바른가
+                 word= newWord
+                 $word.textContent = word;
+                 $input.value ='';
+                 const order= Number($order.textContent)
+                  //현재순서 
+                  if(order+1>number){  
+                  $order.textContent=1;
+
+                   }else{
+                    $order.textContent = order+1;
+                  }
+                    //커서 깜박임
+                    $input.focus()
+              }else{ //올바르지않은가
+                  alert('올바르지 않는 단어입니다')
+                  $input.value ='';
+                  $input.focus()
+              }
+            }
+
+          }
+          const onInput=()=>{
+            newWord = event.target.value;
+          }
+
+            //글자를 앞으로 입력할때마다 함수부분이 계속 실행->콜백함수 
+            //이벤트 객체의 타겟 객체의 값=> 사용자가 입력한 값이 보임
+      $button.addEventListener('click',onClickButton);
+      $input.addEventListener('input',onInput)    
+      
+        </script>
+  
+</body>
+</html>
