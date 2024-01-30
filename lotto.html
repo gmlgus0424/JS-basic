@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<head>
+<meta charset="utf-8">
+<title>로또추첨기</title>
+<style>
+.ball {
+  display: inline-block; 
+  border: 1px solid black; 
+  border-radius: 20px; 
+  width: 40px;
+  height: 40px;
+  line-height: 40px; 
+  font-size: 20px; 
+  text-align: center; 
+  margin-right: 20px;
+}
+</style>
+</head>
+<body>
+<form id="form">
+  <input name="input" placeholder="숫자 6개를 쉼표로 구분해 입력하세요." />
+  <button>추첨</button>
+</form>
+<div id="result">당첨 숫자: </div>
+<div id="bonus">보너스 숫자: </div>
+
+<script>
+
+const  $form = document.querySelector('#form')
+
+
+
+
+//45개 숫자 준비 빈배열 45개 undifined로 만들고 map으로 i(인덱스)에 1더하기 = 1부터 45 뽑기
+const ball = Array(45).fill().map((v,i)=> i+1)
+
+//섞고 뽑기
+const randomResult= [];
+while(ball.length>0 ){
+  const random = Math.floor(Math.random()* ball.length) //무작위뽑기
+  const spliceArray= ball.splice(random,1) //뽑은 값은 배열에 들어있고
+  const value= spliceArray; //공뽑았는데 3이 나왔다 그걸 가지고 
+  randomResult.push(value) //result라는 빈배열에 값(3)을 넣어줌 
+}
+
+console.log(result)
+//45개 섞은것을 0-6까지 자르고 sort로 정렬 
+const winBalls= result.slice(0,6).sort((a,b)=>a-b)
+//7번째 공 가져오기 
+const bonus= result[6]
+console.log(winBalls,bonus)
+
+
+//첫번째자리 함수자리 두번째 자리는 초 
+//당첨 숫자 선택해서 1초뒤에 div태그 만들고 classname을 ball로 지정한 후 값을 보여줌 
+const $result = document.querySelector('#result')
+const $bonus= document.querySelector('#bonus')
+
+const showBall=(number,$target)=>{
+  const $ball =document.querySelector('div')
+  $ball.className='ball'
+  $ball.textContent= number
+  $target.appendChild($ball)
+
+
+}
+//[0,1,2,3,4,5]=>[1000,2000,3000, 4000, 5000,6000]
+for(let i= 0; i<6;i++){
+  setTimeout(()=>{
+showBall(winBalls[0],$result)
+},(i+1)*1000)
+}
+
+
+setTimeout(()=>{
+showBall(bonus,$bonus)
+},7000)
+</script>
+
+</body>
+</html>
