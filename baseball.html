@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <form id="form">
+  <input type="text" id="input">
+  <button>확인</button>
+  </form>
+  <div id="logs"></div>
+  <script>
+    const $form = document.querySelector('#form')
+    const $input = document.querySelector('#input')
+    const $logs = document.querySelector('#logs')
+
+
+    //배열은 단순히 값들만 모아둘때 , 객체리터럴은 각각의 값들에 속성을 부여할때 
+    const numbers= [];
+    for(let n=0; n<9; n+=1){
+      numbers.push(n+1)
+    }
+
+  //숫자 랜덤
+  const answer=[]; //3146 이런것들 
+  for (let n=0; n<=3; n+=1){//네번 반복
+    const index= Math.floor(Math.random()*(numbers.length - n ))//0~8정수
+    answer.push(numbers[index]) // 원래 있던거(numbers[index])에서 뽑았으면 다른 곳(answer)에 넣기// 새로 넣을곳.push(원래있던배열)
+    numbers.splice(index,1) //원래 있던거 뽑았으면 원래있던거 하나 지우기 //원래있던배열.splice
+    
+  }
+  console.log(answer)
+
+  const tries=[];
+  function checkInput(input){
+    if(input.length!==4){
+    return  alert(
+        "4자리 숫자를 입력하세요"
+      )
+    }
+    if(new Set(input).size !==4){
+      return alert('중복되지 않게 입력해주세요')
+    }
+    if(tries.includes(input)){
+      return alert('이미 시도한 값이다')
+    }
+    return true;
+  }
+
+  $form.addEventListener('submit',(event)=>{
+    event.preventDefault();//기본 동작 막기 form,a태그 등등
+    const value=$input.value; //입력하면 변수에 저장
+    input.value=''; // 값 초기화 
+    //문제있음
+    if(!checkInput(value)){
+      return;
+    }
+
+      //입력값 문제없음
+      if(answer.join('')===value){//배열을 문자열로 바꾸는 메소드 join
+        $logs.textContent ="홈런";
+        return;
+      }
+      // 10번이상 했을때 졌으면 패배 아니면 
+      if(tries.length>=9){
+        const message=document.createTextNode(`패배 정답은 ${answer.join('')}`)
+        $logs.appendChild(message)
+        return
+      }
+  // 몇 스트라이크 몇 볼인지 검사
+  let strike = 0;
+    let ball = 0;
+    // answer: 3146,  value: 1347
+    for (let i = 0; i < answer.length; i++) {
+      const index = value.indexOf(answer[i]);
+      if (index > -1) { // 일치하는 숫자 발견
+        if (index === i) { // 자릿수도 같음
+          strike += 1;
+        } else { // 숫자만 같음
+          ball += 1; 
+        }
+      }
+    }
+    $logs.append(`${value}: ${strike} 스트라이크 ${ball} 볼`, document.createElement('br'));
+
+
+      tries.push(value)
+    })
+  </script>
+</body>
+</html>
